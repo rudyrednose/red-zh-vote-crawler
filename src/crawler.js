@@ -41,7 +41,17 @@ module.exports.exe = {
 
         return rows;
       });
+    },
+
+    constituencies: function(electionId) {
+      return htmlFetch(electionId + '/viewer.php?table=kandbezirke', function($) {
+        var rows = converter.cheerioTable($, $('table').eq(-2)).slice(0, -1);
+
+        return rows;
+      });
     }
   }
+
+
 };
 

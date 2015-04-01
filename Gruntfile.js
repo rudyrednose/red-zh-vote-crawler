@@ -35,4 +35,19 @@ module.exports = function(grunt) {
       done();
     });
   });
+
+  grunt.registerTask('fetch:exe:constituencies', 'fetches executive candidates results for each constituency', function() {
+    var done = this.async();
+
+    crawler.exe.candidates.constituencies(getElectionId()).then(function(rows) {
+      console.log(rows);
+      done();
+    });
+
+    process.on('uncaughtException', function (err) {
+      console.log(err);
+    });
+
+  });
+
 };
