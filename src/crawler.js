@@ -33,6 +33,25 @@ module.exports.lists = {
   }
 };
 
+module.exports.seats = {
+  constituencies: function(electionId) {
+    return htmlFetch(electionId + '/viewer.php?menu=sitzzuteilung', function($) {
+
+      var $table = $('table').eq(-3);
+
+      $table.find('tr.kopf').first().remove();
+
+      //console.log($('table').eq(-3));
+
+      var rows = converter.cheerioTable($, $table);
+
+      return rows;
+    });
+  }
+};
+
+
+
 module.exports.exe = {
   candidates: {
     canton: function(electionId) {

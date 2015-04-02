@@ -10,7 +10,19 @@ module.exports.cheerioTable = function($, $table) {
     var columns = [], classes = [];
 
     $(this).find('td').each(function() {
-      var text = $(this).text().trim(); // trim --> to remove whitespace before and after
+      var text = $(this).html();
+
+      var textBRsplitted = text.split('<br>');
+      for (var i = 0; i < textBRsplitted.length; i++){
+        textBRsplitted[i] = textBRsplitted[i].replace(/(<([^>]+)>)/ig,'').trim();
+      }
+      
+      if (textBRsplitted.length > 1){
+        text = textBRsplitted.join('<br>');
+      }else{
+        text = $(this).text().trim(); // trim --> to remove whitespace before and after
+      }
+
       var colspan = $(this).attr('colspan') || 1;
       for(var i = 1; i <= colspan; i++) {
         columns.push(text + (i > 1 ? ' ' + i : ''));
@@ -43,10 +55,24 @@ module.exports.cheerioTable = function($, $table) {
     rows.push(columns);
   });
 
+  //console.log(rows);
+
   var objects = d3.csv.parse(d3.csv.formatRows(rows));
   objects.forEach(function(object) {
     object.classes = object.classes.split(' ');
+
+    _.forEach(object, function(n,key){
+      if (typeof n == 'string'){
+        var textSplitted = n.split('<br>');
+        if (textSplitted.length > 1){
+          object[key] = textSplitted;
+        }
+      }
+    });
+
   });
+
+
 
   return objects;
 };

@@ -22,7 +22,18 @@ module.exports = function(grunt) {
     var done = this.async();
 
     crawler.lists.constituencies(getElectionId()).then(function(rows) {
-      console.log(rows);
+      //console.log(rows);
+      console.log(JSON.stringify(rows));
+      done();
+    });
+  });
+
+  grunt.registerTask('fetch:seats:constituencies', 'fetches seats allocation results in constituencies and canton', function() {
+    var done = this.async();
+
+    crawler.seats.constituencies(getElectionId()).then(function(rows) {
+      //console.log(rows);
+      console.log(JSON.stringify(rows));
       done();
     });
   });
@@ -43,11 +54,6 @@ module.exports = function(grunt) {
       console.log(rows);
       done();
     });
-
-    process.on('uncaughtException', function (err) {
-      console.log(err);
-    });
-
   });
 
 };
