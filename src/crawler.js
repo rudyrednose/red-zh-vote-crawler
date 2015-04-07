@@ -30,6 +30,30 @@ module.exports.lists = {
 
       return rows;
     });
+  },
+
+  allConstituencyDetails: function(electionId) {
+    var self = this;
+
+    return self.constituencyDetailRecursively(electionId, 1, []);
+
+  },
+
+  constituencyDetailRecursively: function(electionId, detailId, fullResult) {
+    var self = this;
+
+    return htmlFetch(electionId + '/viewer.php?menu=listen_wk&wk='+detailId, function($) {
+      var rows = converter.cheerioTable($, $('table').last());
+
+      fullResult.push(rows);
+
+      if (detailId < 19){
+        return self.constituencyDetailRecursively(electionId, detailId+1, fullResult);
+      }else{
+        return fullResult;
+      }
+
+    });
   }
 };
 

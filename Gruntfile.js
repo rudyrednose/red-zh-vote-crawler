@@ -28,10 +28,11 @@ module.exports = function(grunt) {
     });
   });
 
-  grunt.registerTask('fetch:seats:constituencies', 'fetches seats allocation results in constituencies and canton', function() {
+
+  grunt.registerTask('fetch:lists:allConstituencyDetails', 'fetches seats allocation results in constituencies and canton', function() {
     var done = this.async();
 
-    crawler.seats.constituencies(getElectionId()).then(function(rows) {
+    crawler.lists.allConstituencyDetails(getElectionId()).then(function(rows) {
       //console.log(rows);
       console.log(JSON.stringify(rows));
       done();
