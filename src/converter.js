@@ -9,8 +9,13 @@ module.exports.cheerioTable = function($, $table) {
     var isHeader = i === 0;
     var columns = [], classes = [];
 
+    //console.log($(this).html());
+
     $(this).find('td').each(function() {
       var text = $(this).html();
+      if (isHeader){
+        text = $(this).text();
+      }
 
       var textBRsplitted = text.split('<br>');
       for (var i = 0; i < textBRsplitted.length; i++){
@@ -33,8 +38,8 @@ module.exports.cheerioTable = function($, $table) {
     if(isHeader) {
       columns.push('classes');
       headCols = columns;
-    }
-    else {
+
+    }else{
 
       // check if amount of cols is the same as the first/header row
       // beacuse --> it is possible that the colspan in the html is wrong...
