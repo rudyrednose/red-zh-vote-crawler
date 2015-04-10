@@ -11,12 +11,7 @@ module.exports = function(grunt) {
     return id;
   }
 
-  grunt.registerTask('save:all', 'fetch and save all needed current data', function() {
-    var done = this.async();
-
-    //var electionId = getElectionId();
-    //var rrId = 'rr2015_preview';
-    //var krId = 'kr2011_medieninfo';
+  function getAll(callback){
 
     var rrId = 'rr2015';
     var krId = 'kr2015';
@@ -42,8 +37,8 @@ module.exports = function(grunt) {
               fileSave(fileSrc).write(JSON.stringify(rows), 'utf8', function(){
                 console.log('SAVED to '+fileSrc)
 
-                done();
-
+                callback.call();
+                
               });
             });
           });
@@ -51,6 +46,39 @@ module.exports = function(grunt) {
       });
     });
 
+  };
+
+  grunt.registerTask('save:all', 'fetch and save all needed current data', function() {
+    var done = this.async();
+
+    getAll(function(){
+      done();
+    });
+
+  });
+
+  grunt.registerTask('cron', 'fetch and save all data every 15min', function() {
+    var done = this.async();
+
+    var updateInterval = 2*60;
+    var timer = updateInterval;
+
+    setInterval(function(){
+      timer--;
+      if (timer < 0){
+        timer = updateInterval;
+        getAll(function(){
+          
+        });
+      }
+
+      var min = Math.floor(timer/60);
+      var sec = timer - (min*60);
+
+      console.log(min+':'+sec);
+
+
+    }, 1000);
 
   });
 
